@@ -10,7 +10,7 @@ except:
     print "Please provide a filename argument. Exiting."
     exit(1)
 
-text = open(filename).read()
+text = open(filename).read().decode('utf8')
 wordcloud = WordCloud().generate(text)
 plt.imshow(wordcloud)
 plt.axis('off')

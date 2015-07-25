@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import shelve
+import re
 
 shelf_dict = shelve.open('my_shelf')
 try:
@@ -25,7 +26,10 @@ for person in name_poss:
     # Write all messages by same person to same text file, accounting for nicknames.
     for key in person:
         messages = [tup[0] for tup in my_dict[key]]
+        messages = str(messages).replace("'", "").replace('"', '')[1:-1]
+        # Take out unparseable unicode (e.g., \xe0).
+        messages = re.sub(r'\\x..', '', messages) 
         with open(filename, 'a') as f:
-            f.write(str(messages)[1:-1])
+            f.write(messages.encode('utf8'))
 
 shelf_dict.close()
