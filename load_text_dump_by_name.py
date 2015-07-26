@@ -9,6 +9,7 @@ try:
     option = argv[1]
     filename_suffix = argv[2]
 except IndexError:
+    option = ''
     filename_suffix = ''
 
 shelf_dict = shelve.open('my_shelf')
