@@ -7,29 +7,28 @@ from pprint import pprint
 from nltk.corpus import stopwords
 
 try:
-    filename = argv[1]
+    FILENAME = argv[1]
+    NUM_WORDS = int(argv[2])
 except:
-    print "Please specify a filename. Exiting."
+    print "Please specify a filename and number of words to return.. Exiting."
     exit(1)
 
-transcript = open(filename, 'r').read().encode('utf8')
+transcript = open(FILENAME, 'r').read()
 
 stop = stopwords.words('english')
 transcript_stop = str([word for word in transcript.split() if word not in stop])
-#transcript_stop_3 = str([word for word in transcript_stop.split() if len(word) > 2])
 blob = TextBlob(transcript_stop)
-#blob3 = TextBlob(transcript_stop_3)
 
 # Sorted list representation of the dict.
 sorted_word_counts = sorted(blob.word_counts.items(), key=operator.itemgetter(1), reverse=True)
-sorted_word_counts = [(word, freq, len(word)) for (word, freq) in sorted_word_counts]
+sorted_word_counts = [(word.encode('utf8'), freq) for (word, freq) in sorted_word_counts]
+sorted_word_counts_len = [(word, freq, len(word)) for (word, freq) in sorted_word_counts]
 
-NUM_WORDS = 30
 pprint(sorted_word_counts[:NUM_WORDS])
 
 total = 0
-for tup in sorted_word_counts[:NUM_WORDS]:
+for tup in sorted_word_counts_len[:NUM_WORDS]:
     total += tup[2]
 
-avg = float(total) / NUM_WORDS
-print avg
+avg = round((float(total) / NUM_WORDS), 2)
+print "\nAverage length of your " + str(NUM_WORDS) + " most frequent words: " + str(avg) + "."
